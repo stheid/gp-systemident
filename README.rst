@@ -26,16 +26,16 @@ Installation
 Since the goal of my research is to predict the states of an `openmodelica-microgrid-gym`_ fmu this is also an
 installation requirement.
 
-* Checkout the repository::
+* Clone the repository::
 
-  $ git clone https://github.com/stheid/gp-systemident
+  $ git clone https://github.com/stheid/gp-systemident.git
 
 * Create a :code:`conda` environment for Python 3.8 and enter a conda environment (i recommend to create this in PyCharm if you are using this IDE)
 * Install PyFMI through :code:`conda`::
 
   $ conda install -c conda-forge pyfmi
 
-* Checkout the repository and::
+* Install the complete package::
 
   $ pip install .[examples]
 
@@ -43,7 +43,14 @@ installation requirement.
 Only core deps
 ``````````````
 
-If you want to install it for a different purpose you can leave out the optional dependencies::
+If you want to use this code for another gym you can leave out the optional dependencies::
 
-$ git clone https://github.com/stheid/gp-systemident
+$ git clone https://github.com/stheid/gp-systemident.git
 $ pip install .
+
+Usage
+-----
+
+* `simple GP model`_
+
+.. _`simple GP model`: examples/simpleGP.py
