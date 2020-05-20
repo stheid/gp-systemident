@@ -1,1 +1,4 @@
 /.idea/
+/scratch
+*grid.network.fmu.txt
+/examples/data/
