@@ -29,8 +29,7 @@ class System:
             obs = [self.env.reset()]
             acts = []
             for _ in trange(steps, leave=False):
-                # TODO change to ↓ env.action_space.sample()
-                acts.append(np.random.random(3))
+                acts.append(self.env.action_space.sample())
                 obs_, r, done, _ = self.env.step(acts[-1])
                 obs.append(obs_)  # take a random action
                 if done:

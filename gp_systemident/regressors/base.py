@@ -24,3 +24,7 @@ class BaseGPR(MultiOutputMixin, RegressorMixin, BaseEstimator):
 
         err = y.numpy() - pred
         return np.sqrt(np.power(err, 2)).mean()
+
+
+class BaseMultiTaskGPR(BaseGPR):
+    pass
