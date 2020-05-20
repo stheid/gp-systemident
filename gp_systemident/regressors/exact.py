@@ -1,9 +1,10 @@
 import logging
 
 import gpytorch
-import numpy as np
 import torch
-from sklearn.base import RegressorMixin, BaseEstimator, MultiOutputMixin
+from tqdm import trange
+
+from gp_systemident.regressors.base import BaseGPR
 
 logger = logging.getLogger(__name__)
 
@@ -24,11 +25,7 @@ class ExactGPModel(gpytorch.models.ExactGP):
         return gpytorch.distributions.MultitaskMultivariateNormal(mean_x, covar_x)
 
 
-class SimpleExactGPR(MultiOutputMixin, RegressorMixin, BaseEstimator):
-    def __init__(self):
-        self.model = None
-        self.likelihood = None
-
+class ExactMultioutputGPR(BaseGPR):
     def fit(self, X, y, training_iter=50):
         d = y.shape[1]
 
@@ -45,35 +42,20 @@ class SimpleExactGPR(MultiOutputMixin, RegressorMixin, BaseEstimator):
         # "Loss" for GPs - the marginal log likelihood
         mll = gpytorch.mlls.ExactMarginalLogLikelihood(self.likelihood, self.model)
 
-        for i in range(training_iter):
-            # Zero gradients from previous iteration
-            optimizer.zero_grad()
-            # Output from model
-            output = self.model(X)
-            # Calc loss and backprop gradients
-            loss = -mll(output, y)
-            loss.backward()
-            logger.info('Iter %d/%d - Loss: %.3f', i + 1, training_iter, loss.item())
-            optimizer.step()
-
-    def predict(self, X):
-        self.model.eval()
-        self.likelihood.eval()
-
-        # Test points are regularly spaced along [0,1]
-        # Make predictions by feeding model through likelihood
-        with torch.no_grad(), gpytorch.settings.fast_pred_var():
-            pred = self.likelihood(self.model(X)).mean.numpy()
-        return pred
-
-    def score(self, X, y, sample_weight=None):
-        pred = self.predict(X)
-
-        err = y.numpy() - pred
-        return np.sqrt(np.power(err, 2)).mean()
+        with trange(training_iter) as t:
+            for _ in t:
+                # Zero gradients from previous iteration
+                optimizer.zero_grad()
+                # Output from model
+                output = self.model(X)
+                # Calc loss and backprop gradients
+                loss = -mll(output, y)
+                loss.backward()
+                t.set_postfix(loss=loss.item())
+                optimizer.step()
 
 
-class NStateSimpleExactGPR(SimpleExactGPR):
+class NStateExactMultioutputGPR(ExactMultioutputGPR):
     def __init__(self, d_state, d_act):
         super().__init__()
         self.d_state = d_state

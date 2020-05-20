@@ -1,3 +1,3 @@
-from .simple_exact import SimpleExactGPR, NStateSimpleExactGPR
+from .exact import ExactMultioutputGPR, NStateExactMultioutputGPR
 
-__all__ = ['SimpleExactGPR', 'NStateSimpleExactGPR']
+__all__ = ['ExactMultioutputGPR', 'NStateExactMultioutputGPR']
