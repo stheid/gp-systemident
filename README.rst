@@ -9,12 +9,14 @@ Research project with the aim to build `Gaussian process`_ models to efficiently
 The dynamic system is expected to comply to the `OpenAi Gym`_ interface.
 The Gaussian process processes are implemented with the use of GPyTorch_.
 All regressors implement the `scikit-learn`_ interfaces.
+The code is heavily inspired by the excellent `GPyTorch examples`_.
 
 The system identification can be used in `model-based reinforcement learning`_ algorithms.
 
 .. _`OpenAI Gym`: https://gym.openai.com/
 .. _`Gaussian Process`: https://www.youtube.com/watch?v=92-98SYOdlY
 .. _`GPyTorch`: https://github.com/cornellius-gp/gpytorch
+.. _`GPyTorch examples`: https://gpytorch.readthedocs.io/en/latest/examples/00_Basic_Usage/index.html
 .. _`scikit-learn`: https://scikit-learn.org/
 .. _`model-based reinforcement learning`: https://www.youtube.com/watch?v=ItMutbeOHtc
 .. _`openmodelica-microgrid-gym`: https://github.com/upb-lea/openmodelica-microgrid-gym
