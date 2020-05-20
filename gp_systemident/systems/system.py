@@ -5,6 +5,7 @@ from typing import Tuple
 import numpy as np
 import torch
 from gym import Env
+from tqdm import trange
 
 logger = logging.getLogger(__name__)
 
@@ -24,10 +25,10 @@ class System:
 
         data = [np.empty(0)] * 5
 
-        for ep in range(epochs):
+        for ep in trange(epochs):
             obs = [self.env.reset()]
             acts = []
-            for _ in range(steps):
+            for _ in trange(steps, leave=False):
                 # TODO change to ↓ env.action_space.sample()
                 acts.append(np.random.random(3))
                 obs_, r, done, _ = self.env.step(acts[-1])
@@ -71,8 +72,8 @@ class System:
                 X, y, X_fold, y_fold = [torch.from_numpy(d).to(dtype=torch.float32) for d in [X, y, X_fold, y_fold]]
                 return X, y, groups, X_fold, y_fold
             else:
-                X, y, groups, X_fold, y_fold = self.generate(**self.gen_params)
                 logger.info('generating new data')
+                X, y, groups, X_fold, y_fold = self.generate(**self.gen_params)
                 makedirs(self.cache_dir, exist_ok=True)
                 for name, v in zip('X y groups X_fold y_fold'.split(), [X, y, groups, X_fold, y_fold]):
                     np.save(tmpl.format(name), v)
